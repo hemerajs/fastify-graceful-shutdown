@@ -3,6 +3,7 @@
 const fp = require('fastify-plugin')
 const parallel = require('fastparallel')()
 const handlers = []
+let clean = false
 
 function fastifyGracefulShutdown(fastify, opts, next) {
   function done(err, code) {
@@ -16,7 +17,10 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   }
 
   function doActions(signal) {
-    parallel(null, handlers, signal, (err) => done(err, signal))
+    if (!clean) {
+      clean = true
+      parallel(null, handlers, signal, (err) => done(err, signal))
+    }
   }
 
   function addHandler(handler) {
@@ -34,7 +38,8 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     doActions(code)
   })
 
-  // do app specific cleaning before exiting
+  // when the Node.js event loop no longer having any additional work to perform
+  // when the process.exit() method being called explicitly
   process.on('exit', function(code) {
     process.emit('cleanup', code)
   })
