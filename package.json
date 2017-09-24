@@ -1,0 +1,46 @@
+{
+  "name": "fastify-graceful-shutdown",
+  "version": "0.0.0",
+  "description": "Gracefully shutdown fastify",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier ./*.js --write",
+    "test": "prettier ./*.js --debug-check && tap ./test.js | tap-spec",
+    "patch": "np patch --yolo",
+    "minor": "np minor --yolo",
+    "major": "np major --yolo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hemerajs/fastify-graceful-shutdown.git"
+  },
+  "keywords": [
+    "web",
+    "framework",
+    "clean",
+    "fastify",
+    "graceful",
+    "shutdown"
+  ],
+  "author": "Dustin Deus <deusdustin@gmail.com> (http://www.starptech.de)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hemerajs/fastify-graceful-shutdown/issues"
+  },
+  "homepage": "https://github.com/hemerajs/fastify-graceful-shutdown#readme",
+  "devDependencies": {
+    "fastify": "^0.28.2",
+    "np": "^2.16.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.7.0",
+    "tap": "^10.7.2",
+    "tap-spec": "^4.1.1"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "dependencies": {
+    "fastify-plugin": "^0.1.1"
+  }
+}
