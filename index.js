@@ -25,7 +25,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
   function addHandler(handler) {
     if (typeof handler != 'function') {
-      throw new Error('Expected a function but got a ' + typeof fn)
+      throw new Error('Expected a function but got a ' + typeof handler)
     }
     handlers.push(handler)
   }
