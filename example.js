@@ -8,13 +8,8 @@ const fastify = require('../fastify')({
 
 fastify.register(require('./')).after(() => {
   // Register custom clean up handler
-  fastify.graceful(() => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        console.log('Done!')
-        resolve()
-      }, 1000)
-    })
+  fastify.graceful((code, cb) => {
+    cb()
   })
 })
 

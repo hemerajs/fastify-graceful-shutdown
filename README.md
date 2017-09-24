@@ -13,9 +13,7 @@ fastify.register(require('fastify-graceful-shutdown'))
 
 ## Usage
 ```js
-fastify.graceful(() => {
-  return new Promise((resolve, reject) => {
-    // clean up some stuff
-  })
+fastify.graceful((exitCode, next) => {
+  next()
 })
 ```

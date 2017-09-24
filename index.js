@@ -1,45 +1,37 @@
 'use strict'
 
 const fp = require('fastify-plugin')
+const parallel = require('fastparallel')()
 const handlers = []
 
-function doActions(signal) {
-  try {
-    return Promise.all(handlers.map(action => action(signal)))
-  } catch (err) {
-    return Promise.reject(err)
-  }
-}
-
-function addHandler(handler) {
-  handlers.push(handler)
-}
-
 function fastifyGracefulShutdown(fastify, opts, next) {
+  function done(err, code) {
+    if (err) {
+      fastify.logger.error({ err: err, exitCode: code }, 'graceful shutdown')
+      process.exit(1)
+    } else {
+      fastify.logger.info({ exitCode: code }, 'graceful shutdown')
+      process.exit(0)
+    }
+  }
+
+  function doActions(signal) {
+    parallel(null, handlers, signal, (err) => done(err, signal))
+  }
+
+  function addHandler(handler) {
+    handlers.push(handler)
+  }
+
   fastify.decorate('graceful', addHandler)
 
   // shutdown fastify
-  addHandler(code => {
-    return new Promise((resolve, reject) => {
-      fastify.close(err => {
-        if (err) {
-          return reject(err)
-        }
-        return resolve()
-      })
-    })
+  addHandler((code, cb) => {
+    fastify.close(cb)
   })
 
   process.on('cleanup', code => {
     doActions(code)
-      .then(x => {
-        fastify.logger.info({ exitCode: code }, 'graceful shutdown')
-        process.exit(0)
-      })
-      .catch(err => {
-        fastify.logger.error({ err: err, exitCode: code }, 'graceful shutdown')
-        process.exit(1)
-      })
   })
 
   // do app specific cleaning before exiting
