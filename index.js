@@ -26,7 +26,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     handlers.push(handler)
   }
 
-  fastify.decorate('graceful', addHandler)
+  fastify.decorate('gracefulShutdown', addHandler)
 
   // shutdown fastify
   addHandler((code, cb) => {

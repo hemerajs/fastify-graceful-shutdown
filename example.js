@@ -8,7 +8,7 @@ const fastify = require('../fastify')({
 
 fastify.register(require('./')).after(() => {
   // Register custom clean up handler
-  fastify.graceful((code, cb) => {
+  fastify.gracefulShutdown((code, cb) => {
     cb()
   })
 })
