@@ -1,5 +1,5 @@
 # fastify-graceful-shutdown
-Shutdown of fastify gracefull asynchronously. By default the fastify `close` hook is called when `SIGINT` or `SIGTERM` was triggered.
+Shutdown fastify graceful asynchronously. By default the fastify `close` hook is called when `SIGINT` or `SIGTERM` was triggered.
 
 ## Install
 ```bash
