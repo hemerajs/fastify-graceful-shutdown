@@ -19,11 +19,14 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   function doActions(signal) {
     if (!clean) {
       clean = true
-      parallel(null, handlers, signal, (err) => done(err, signal))
+      parallel(null, handlers, signal, err => done(err, signal))
     }
   }
 
   function addHandler(handler) {
+    if (typeof handler != 'function') {
+      throw new Error('Expected a function but got a ' + typeof fn)
+    }
     handlers.push(handler)
   }
 
