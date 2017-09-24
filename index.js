@@ -3,7 +3,6 @@
 const fp = require('fastify-plugin')
 const parallel = require('fastparallel')()
 const handlers = []
-let clean = false
 
 function fastifyGracefulShutdown(fastify, opts, next) {
   function completed(err, code) {
@@ -17,10 +16,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   }
 
   function shutdown(signal) {
-    if (!clean) {
-      clean = true
-      parallel(null, handlers, signal, err => completed(err, signal))
-    }
+    parallel(null, handlers, signal, err => completed(err, signal))
   }
 
   function addHandler(handler) {
