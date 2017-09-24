@@ -37,16 +37,6 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     fastify.close(cb)
   })
 
-  process.on('cleanup', code => {
-    shutdown(code)
-  })
-
-  // when the Node.js event loop no longer having any additional work to perform
-  // when the process.exit() method being called explicitly
-  process.on('exit', function(code) {
-    process.emit('cleanup', code)
-  })
-
   // catch ctrl+c event and exit normally
   process.on('SIGINT', function() {
     shutdown('SIGINT')
