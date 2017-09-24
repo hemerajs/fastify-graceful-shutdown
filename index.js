@@ -6,7 +6,7 @@ const handlers = []
 let clean = false
 
 function fastifyGracefulShutdown(fastify, opts, next) {
-  function done(err, code) {
+  function completed(err, code) {
     if (err) {
       fastify.logger.error({ err: err, exitCode: code }, 'graceful shutdown')
       process.exit(1)
@@ -16,10 +16,10 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     }
   }
 
-  function doActions(signal) {
+  function shutdown(signal) {
     if (!clean) {
       clean = true
-      parallel(null, handlers, signal, err => done(err, signal))
+      parallel(null, handlers, signal, err => completed(err, signal))
     }
   }
 
@@ -38,7 +38,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   })
 
   process.on('cleanup', code => {
-    doActions(code)
+    shutdown(code)
   })
 
   // when the Node.js event loop no longer having any additional work to perform
@@ -49,12 +49,12 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
   // catch ctrl+c event and exit normally
   process.on('SIGINT', function() {
-    doActions('SIGINT')
+    shutdown('SIGINT')
   })
 
   // is sent to a process to request its termination
   process.on('SIGTERM', function() {
-    doActions('SIGTERM')
+    shutdown('SIGTERM')
   })
 
   next()
