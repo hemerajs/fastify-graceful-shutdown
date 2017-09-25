@@ -2,17 +2,39 @@
 
 const fp = require('fastify-plugin')
 const parallel = require('fastparallel')()
-const handlers = []
 
 function fastifyGracefulShutdown(fastify, opts, next) {
-  function completed(err, code) {
+  const logger = fastify.logger.child({ plugin: 'fastify-graceful-shutdown' })
+  const handlers = []
+  const timeout = opts.timeout || 5000
+  const signals = ['SIGINT', 'SIGTERM']
+
+  signals.forEach(signal => {
+    if (process.listenerCount(signal) > 0) {
+      throw new Error(
+        `${signal} handler was already registered use fastify.gracefulShutdown`
+      )
+    }
+  })
+
+  function completed(err, signal) {
     if (err) {
-      fastify.logger.error({ err: err, exitCode: code }, 'graceful shutdown')
+      logger.error({ err: err, signal: signal }, 'process terminated')
       process.exit(1)
     } else {
-      fastify.logger.info({ exitCode: code }, 'graceful shutdown')
+      logger.info({ signal: signal }, 'process terminated')
       process.exit(0)
     }
+  }
+
+  function terminateAfterTimeout(signal, timeout) {
+    setTimeout(() => {
+      logger.error(
+        { signal: signal, timeout: timeout },
+        'terminate process after timeout'
+      )
+      process.exit(1)
+    }, timeout)
   }
 
   function shutdown(signal) {
@@ -29,18 +51,18 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   fastify.decorate('gracefulShutdown', addHandler)
 
   // shutdown fastify
-  addHandler((code, cb) => {
+  addHandler((signal, cb) => {
+    logger.info({ signal: signal }, 'triggering close hook')
     fastify.close(cb)
   })
 
-  // catch ctrl+c event and exit normally
-  process.on('SIGINT', function() {
-    shutdown('SIGINT')
-  })
-
-  // is sent to a process to request its termination
-  process.on('SIGTERM', function() {
-    shutdown('SIGTERM')
+  // register handlers
+  signals.forEach(signal => {
+    process.once(signal, () => {
+      terminateAfterTimeout(signal, timeout)
+      logger.info({ signal: signal }, 'received signal')
+      shutdown(signal)
+    })
   })
 
   next()
