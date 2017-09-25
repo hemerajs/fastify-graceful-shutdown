@@ -25,4 +25,4 @@ fastify.gracefulShutdown((exitCode, next) => {
 
 - Don't register signal handlers otherwise except with this plugin.
 - Use fastify `onClose` hook to release resources in your plugin.
-- The process will be exited after a certain timeout (Default 5 seconds) to protect against stuck process.
+- The process will be exited after a certain timeout (Default 10 seconds) to protect against stuck process.
