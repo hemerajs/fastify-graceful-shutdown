@@ -16,7 +16,7 @@ fastify.register(require('fastify-graceful-shutdown'))
 
 ## Usage
 ```js
-fastify.gracefulShutdown((exitCode, next) => {
+fastify.gracefulShutdown((signal, next) => {
   next()
 })
 ```

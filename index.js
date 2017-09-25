@@ -9,13 +9,17 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   const timeout = opts.timeout || 10000
   const signals = ['SIGINT', 'SIGTERM']
 
-  signals.forEach(signal => {
+  for (let i = 0; i < signals.length; i++) {
+    let signal = signals[i]
     if (process.listenerCount(signal) > 0) {
-      throw new Error(
-        `${signal} handler was already registered use fastify.gracefulShutdown`
+      next(
+        new Error(
+          `${signal} handler was already registered use fastify.gracefulShutdown`
+        )
       )
+      return
     }
-  })
+  }
 
   function completed(err, signal) {
     if (err) {
