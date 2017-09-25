@@ -38,7 +38,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
         'terminate process after timeout'
       )
       process.exit(1)
-    }, timeout)
+    }, timeout).unref()
   }
 
   function shutdown(signal) {
