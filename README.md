@@ -24,5 +24,6 @@ fastify.gracefulShutdown((signal, next) => {
 ## Caveats
 
 - Don't register signal handlers otherwise except with this plugin.
+- Can't be used with a different logger other than [Pino](https://github.com/pinojs/pino) because we use the child logger feature to encapsulate the logs.
 - Use fastify `onClose` hook to release resources in your plugin.
 - The process will be exited after a certain timeout (Default 10 seconds) to protect against stuck process.
