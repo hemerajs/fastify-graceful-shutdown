@@ -4,7 +4,7 @@ const fp = require('fastify-plugin')
 const parallel = require('fastparallel')()
 
 function fastifyGracefulShutdown(fastify, opts, next) {
-  const logger = fastify.logger.child({ plugin: 'fastify-graceful-shutdown' })
+  const logger = fastify.log.child({ plugin: 'fastify-graceful-shutdown' })
   const handlers = []
   const timeout = opts.timeout || 10000
   const signals = ['SIGINT', 'SIGTERM']
