@@ -7,7 +7,7 @@ const fastify = require('fastify')({
 })
 
 fastify.register(require('./')).after((err) => {
-  fastify.logger.error(err)
+  fastify.log.error(err)
   // Register custom clean up handler
   fastify.gracefulShutdown((code, cb) => {
     cb()
