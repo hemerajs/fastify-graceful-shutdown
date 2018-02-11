@@ -72,4 +72,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   next()
 }
 
-module.exports = fp(fastifyGracefulShutdown, '>=0.28.2')
+module.exports = fp(fastifyGracefulShutdown, {
+  fastify: '>=0.28.2',
+  name: 'fastify-graceful-shutdown'
+})
