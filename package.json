@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/hemerajs/fastify-graceful-shutdown#readme",
   "devDependencies": {
-    "fastify": "^1.0.0",
+    "fastify": "^2.1.0",
     "np": "^4.0.2",
     "pre-commit": "^1.2.2",
     "prettier": "^1.11.1",
