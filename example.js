@@ -2,11 +2,11 @@
 
 const fastify = require('fastify')({
   logger: {
-    level: 'info'
-  }
+    level: 'info',
+  },
 })
 
-fastify.register(require('./')).after(err => {
+fastify.register(require('./')).after((err) => {
   fastify.log.error(err)
   // Register custom clean up handler
   fastify.gracefulShutdown((code, cb) => {
@@ -21,19 +21,19 @@ const schema = {
         type: 'object',
         properties: {
           hello: {
-            type: 'string'
-          }
-        }
-      }
-    }
-  }
+            type: 'string',
+          },
+        },
+      },
+    },
+  },
 }
 
-fastify.get('/', schema, function(req, reply) {
+fastify.get('/', schema, function (req, reply) {
   reply.send({ hello: 'world' })
 })
 
-fastify.listen(3000, err => {
+fastify.listen(3000, (err) => {
   if (err) throw err
   console.log(`server listening on ${fastify.server.address().port}`)
 })

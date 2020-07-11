@@ -42,7 +42,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   }
 
   function shutdown(signal) {
-    parallel(null, handlers, signal, err => completed(err, signal))
+    parallel(null, handlers, signal, (err) => completed(err, signal))
   }
 
   function addHandler(handler) {
@@ -61,7 +61,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   })
 
   // register handlers
-  signals.forEach(signal => {
+  signals.forEach((signal) => {
     process.once(signal, () => {
       terminateAfterTimeout(signal, timeout)
       logger.info({ signal: signal }, 'received signal')
@@ -74,5 +74,5 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
 module.exports = fp(fastifyGracefulShutdown, {
   fastify: '^3.0.0',
-  name: 'fastify-graceful-shutdown'
+  name: 'fastify-graceful-shutdown',
 })
