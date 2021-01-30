@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier ./*.js --write",
-    "test": "prettier ./*.js --debug-check && tap ./test.js | tap-spec",
+    "test": "prettier ./*.js --debug-check && tap ./test.js | tap-spec && tsd",
     "patch": "np patch --yolo",
     "minor": "np minor --yolo",
     "major": "np major --yolo"
@@ -34,7 +34,8 @@
     "pre-commit": "^1.2.2",
     "prettier": "^2.2.1",
     "tap": "^14.11.0",
-    "tap-spec": "^5.0.0"
+    "tap-spec": "^5.0.0",
+    "tsd": "^0.14.0"
   },
   "prettier": {
     "semi": false,
