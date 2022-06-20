@@ -28,6 +28,10 @@ fastify.after(() => {
 })
 ```
 
+## Compatibility
+
+Fastify >=3
+
 ## Caveats
 
 - Don't register signal handlers otherwise except with this plugin.
