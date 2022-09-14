@@ -16,7 +16,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   registeredListeners.forEach(({ signal, listener }) => {
     process.removeListener(signal, listener)
   })
-  registeredListeners.splice(0,registeredListeners.length)
+  registeredListeners.splice(0, registeredListeners.length)
 
   for (let i = 0; i < signals.length; i++) {
     let signal = signals[i]
