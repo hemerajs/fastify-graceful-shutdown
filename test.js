@@ -1,12 +1,34 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
 const Fastify = require('fastify')
+const fastifyGracefulShutdown = require('./')
 
-const fastify = Fastify()
+describe('fastify-graceful-shutdown', () => {
+  it('can start and stop multiple instances of fastify', async () => {
+    const fastify = Fastify()
+    fastify.register(fastifyGracefulShutdown)
 
-test('plugin', (t) => {
-  t.plan(1)
-  t.ok(true)
+    fastify.after(() => {
+      fastify.gracefulShutdown((signal, next) => {
+        fastify.log.info('Starting graceful shutdown')
+        next()
+      })
+    })
+
+    await fastify.ready()
+    await fastify.close()
+
+    const fastify2 = Fastify()
+    fastify2.register(fastifyGracefulShutdown)
+
+    fastify2.after(() => {
+      fastify2.gracefulShutdown((signal, next) => {
+        fastify2.log.info('Starting graceful shutdown')
+        next()
+      })
+    })
+
+    await fastify2.ready()
+    await fastify2.close()
+  })
 })

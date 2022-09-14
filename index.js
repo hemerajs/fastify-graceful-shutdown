@@ -1,13 +1,22 @@
 'use strict'
 
 const fp = require('fastify-plugin')
+const process = require('process')
 const parallel = require('fastparallel')()
+
+const registeredListeners = []
 
 function fastifyGracefulShutdown(fastify, opts, next) {
   const logger = fastify.log.child({ plugin: 'fastify-graceful-shutdown' })
   const handlers = []
   const timeout = opts.timeout || 10000
   const signals = ['SIGINT', 'SIGTERM']
+
+  // Remove preexisting listeners if already created by previous instance of same plugin
+  registeredListeners.forEach(({ signal, listener }) => {
+    process.removeListener(signal, listener)
+  })
+  registeredListeners.splice(0,registeredListeners.length)
 
   for (let i = 0; i < signals.length; i++) {
     let signal = signals[i]
@@ -62,11 +71,13 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
   // register handlers
   signals.forEach((signal) => {
-    process.once(signal, () => {
+    const listener = () => {
       terminateAfterTimeout(signal, timeout)
       logger.info({ signal: signal }, 'received signal')
       shutdown(signal)
-    })
+    }
+    registeredListeners.push({ signal, listener })
+    process.once(signal, listener)
   })
 
   next()
