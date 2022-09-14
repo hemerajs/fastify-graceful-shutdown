@@ -29,20 +29,20 @@
   },
   "homepage": "https://github.com/hemerajs/fastify-graceful-shutdown#readme",
   "devDependencies": {
-    "fastify": "^4.0.2",
-    "np": "^7.5.0",
+    "fastify": "^4.5.3",
+    "np": "^7.6.2",
     "pre-commit": "^1.2.2",
     "prettier": "^2.2.1",
-    "tap": "^15.0.6",
+    "tap": "^15.2.3",
     "tap-spec": "^5.0.0",
-    "tsd": "^0.21.0"
+    "tsd": "^0.23.0"
   },
   "prettier": {
     "semi": false,
     "singleQuote": true
   },
   "dependencies": {
-    "fastify-plugin": "^3.0.0",
-    "fastparallel": "^2.4.0"
+    "fastify-plugin": "^4.2.1",
+    "fastparallel": "^2.4.1"
   }
 }
