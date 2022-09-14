@@ -6,6 +6,7 @@
   "scripts": {
     "format": "prettier ./*.js --write",
     "test": "prettier ./*.js --debug-check && tap ./test.js | tap-spec && tsd",
+    "test:ts": "tsd",
     "patch": "np patch --yolo",
     "minor": "np minor --yolo",
     "major": "np major --yolo"
