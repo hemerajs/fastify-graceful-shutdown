@@ -1,6 +1,11 @@
 import { FastifyPluginCallback } from 'fastify'
+import { EventEmitter } from 'events'
 
-export type fastifyGracefulShutdownOpt = { timeout?: number }
+export type fastifyGracefulShutdownOpt = {
+  timeout?: number
+  resetHandlersOnInit?: boolean
+  handlerEventListener?: EventEmitter & { exit(code?: number): never; }
+}
 
 export const fastifyGracefulShutdown: FastifyPluginCallback<fastifyGracefulShutdownOpt>
 export default fastifyGracefulShutdown

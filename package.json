@@ -30,6 +30,8 @@
   },
   "homepage": "https://github.com/hemerajs/fastify-graceful-shutdown#readme",
   "devDependencies": {
+    "@types/node": "^18.7.18",
+    "chai": "^4.3.6",
     "fastify": "^4.5.3",
     "mocha": "^10.0.0",
     "np": "^7.6.2",
