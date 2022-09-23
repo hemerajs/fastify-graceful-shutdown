@@ -4,7 +4,7 @@ const fp = require('fastify-plugin')
 const process = require('process')
 const parallel = require('fastparallel')()
 
-const registeredListeners = []
+let registeredListeners = []
 
 function fastifyGracefulShutdown(fastify, opts, next) {
   const logger = fastify.log.child({ plugin: 'fastify-graceful-shutdown' })
@@ -18,7 +18,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     registeredListeners.forEach(({ signal, listener }) => {
       handlerEventListener.removeListener(signal, listener)
     })
-    registeredListeners.splice(0, registeredListeners.length)
+    registeredListeners = []
   }
 
   for (let i = 0; i < signals.length; i++) {
