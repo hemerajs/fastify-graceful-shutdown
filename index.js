@@ -1,17 +1,29 @@
 'use strict'
 
 const fp = require('fastify-plugin')
+const process = require('process')
 const parallel = require('fastparallel')()
+
+let registeredListeners = []
 
 function fastifyGracefulShutdown(fastify, opts, next) {
   const logger = fastify.log.child({ plugin: 'fastify-graceful-shutdown' })
   const handlers = []
   const timeout = opts.timeout || 10000
   const signals = ['SIGINT', 'SIGTERM']
+  const handlerEventListener = opts.handlerEventListener || process
+
+  // Remove preexisting listeners if already created by previous instance of same plugin
+  if (opts.resetHandlersOnInit) {
+    registeredListeners.forEach(({ signal, listener }) => {
+      handlerEventListener.removeListener(signal, listener)
+    })
+    registeredListeners = []
+  }
 
   for (let i = 0; i < signals.length; i++) {
     let signal = signals[i]
-    if (process.listenerCount(signal) > 0) {
+    if (handlerEventListener.listenerCount(signal) > 0) {
       next(
         new Error(
           `${signal} handler was already registered use fastify.gracefulShutdown`
@@ -24,10 +36,10 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   function completed(err, signal) {
     if (err) {
       logger.error({ err: err, signal: signal }, 'process terminated')
-      process.exit(1)
+      handlerEventListener.exit(1)
     } else {
       logger.info({ signal: signal }, 'process terminated')
-      process.exit(0)
+      handlerEventListener.exit(0)
     }
   }
 
@@ -37,7 +49,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
         { signal: signal, timeout: timeout },
         'terminate process after timeout'
       )
-      process.exit(1)
+      handlerEventListener.exit(1)
     }, timeout).unref()
   }
 
@@ -62,11 +74,13 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
   // register handlers
   signals.forEach((signal) => {
-    process.once(signal, () => {
+    const listener = () => {
       terminateAfterTimeout(signal, timeout)
       logger.info({ signal: signal }, 'received signal')
       shutdown(signal)
-    })
+    }
+    registeredListeners.push({ signal, listener })
+    handlerEventListener.once(signal, listener)
   })
 
   next()

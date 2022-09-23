@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier ./*.js --write",
-    "test": "prettier ./*.js --debug-check && tap ./test.js | tap-spec && tsd",
+    "test": "prettier ./*.js --debug-check && mocha && tsd",
     "test:ts": "tsd",
     "patch": "np patch --yolo",
     "minor": "np minor --yolo",
@@ -30,13 +30,14 @@
   },
   "homepage": "https://github.com/hemerajs/fastify-graceful-shutdown#readme",
   "devDependencies": {
-    "fastify": "^4.5.3",
+    "@types/node": "^18.7.18",
+    "chai": "^4.3.6",
+    "fastify": "^4.6.0",
+    "mocha": "^10.0.0",
     "np": "^7.6.2",
     "pre-commit": "^1.2.2",
     "prettier": "^2.2.1",
-    "tap": "^15.2.3",
-    "tap-spec": "^5.0.0",
-    "tsd": "^0.23.0"
+    "tsd": "^0.24.1"
   },
   "prettier": {
     "semi": false,
