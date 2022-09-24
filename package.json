@@ -11,6 +11,10 @@
     "minor": "np minor --yolo",
     "major": "np major --yolo"
   },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hemerajs/fastify-graceful-shutdown.git"
