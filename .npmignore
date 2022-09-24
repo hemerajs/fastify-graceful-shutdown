@@ -1,0 +1,4 @@
+.github
+.gitignore
+.nyc_output
+node_modules
