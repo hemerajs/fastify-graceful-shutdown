@@ -12,6 +12,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   const timeout = opts.timeout || 10000
   const signals = ['SIGINT', 'SIGTERM']
   const handlerEventListener = opts.handlerEventListener || process
+  const ignoreExistingHandlers = opts.ignoreExistingHandlers || false
 
   // Remove preexisting listeners if already created by previous instance of same plugin
   if (opts.resetHandlersOnInit) {
@@ -21,15 +22,17 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     registeredListeners = []
   }
 
-  for (let i = 0; i < signals.length; i++) {
-    let signal = signals[i]
-    if (handlerEventListener.listenerCount(signal) > 0) {
-      next(
-        new Error(
-          `${signal} handler was already registered use fastify.gracefulShutdown`
+  if(!ignoreExistingHandlers) {
+    for (let i = 0; i < signals.length; i++) {
+      let signal = signals[i]
+      if (handlerEventListener.listenerCount(signal) > 0) {
+        next(
+          new Error(
+            `${signal} handler was already registered use fastify.gracefulShutdown`
+          )
         )
-      )
-      return
+        return
+      }
     }
   }
 

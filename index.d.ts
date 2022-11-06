@@ -5,6 +5,7 @@ export type fastifyGracefulShutdownOpt = {
   timeout?: number
   resetHandlersOnInit?: boolean
   handlerEventListener?: EventEmitter & { exit(code?: number): never; }
+  ignoreExistingHandlers?: boolean
 }
 
 export const fastifyGracefulShutdown: FastifyPluginCallback<fastifyGracefulShutdownOpt>
