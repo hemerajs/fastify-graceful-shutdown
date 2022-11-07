@@ -1,5 +1,11 @@
 # 🏹 fastify-graceful-shutdown
 
+<br/>
+
+> **Note**: If you are looking for a simple generic module to run shutdown logic, I recommend using [close-with-grace](https://github.com/mcollina/close-with-grace). This module goes an opinionated way, and does want to solve all use cases.
+
+<br/>
+
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](#badge)
 [![NPM version](https://img.shields.io/npm/v/fastify-graceful-shutdown.svg?style=flat)](https://www.npmjs.com/package/fastify-graceful-shutdown)
 
