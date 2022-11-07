@@ -2,7 +2,7 @@
 
 <br/>
 
-> **Note**: If you are looking for a simple generic module to run shutdown logic, I recommend using [close-with-grace](https://github.com/mcollina/close-with-grace). This module goes an opinionated way, and does want to solve all use cases.
+> **Note**: If you are looking for a simple generic module to run shutdown logic, I recommend using [close-with-grace](https://github.com/mcollina/close-with-grace). `fastify-graceful-shutdown` goes an opinionated way, and does want to solve all use cases.
 
 <br/>
 
