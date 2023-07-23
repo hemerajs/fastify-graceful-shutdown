@@ -36,9 +36,13 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   function completed(err, signal) {
     if (err) {
       logger.error({ err: err, signal: signal }, 'process terminated')
+      // Avoid losing data
+      logger.flush()
       handlerEventListener.exit(1)
     } else {
       logger.debug({ signal: signal }, 'process terminated')
+      // Avoid losing data
+      logger.flush()
       handlerEventListener.exit(0)
     }
   }
