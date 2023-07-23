@@ -26,8 +26,8 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     if (handlerEventListener.listenerCount(signal) > 0) {
       next(
         new Error(
-          `${signal} handler was already registered use fastify.gracefulShutdown`
-        )
+          `${signal} handler was already registered use fastify.gracefulShutdown`,
+        ),
       )
       return
     }
@@ -38,7 +38,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
       logger.error({ err: err, signal: signal }, 'process terminated')
       handlerEventListener.exit(1)
     } else {
-      logger.info({ signal: signal }, 'process terminated')
+      logger.debug({ signal: signal }, 'process terminated')
       handlerEventListener.exit(0)
     }
   }
@@ -47,7 +47,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     setTimeout(() => {
       logger.error(
         { signal: signal, timeout: timeout },
-        'terminate process after timeout'
+        'terminate process after timeout',
       )
       handlerEventListener.exit(1)
     }, timeout).unref()
@@ -68,7 +68,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
   // shutdown fastify
   addHandler((signal, cb) => {
-    logger.info({ signal: signal }, 'triggering close hook')
+    logger.debug({ signal: signal }, 'triggering close hook')
     fastify.close(cb)
   })
 
@@ -76,7 +76,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   signals.forEach((signal) => {
     const listener = () => {
       terminateAfterTimeout(signal, timeout)
-      logger.info({ signal: signal }, 'received signal')
+      logger.debug({ signal: signal }, 'received signal')
       shutdown(signal)
     }
     registeredListeners.push({ signal, listener })
