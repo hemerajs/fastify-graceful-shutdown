@@ -32,10 +32,8 @@
   "bugs": {
     "url": "https://github.com/hemerajs/fastify-graceful-shutdown/issues"
   },
-  "node": {
-    "engines": {
-      "node": ">=16.0.0"
-    }
+  "engines": {
+    "node": ">=16.0.0"
   },
   "homepage": "https://github.com/hemerajs/fastify-graceful-shutdown#readme",
   "devDependencies": {
