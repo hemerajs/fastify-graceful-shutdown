@@ -2,15 +2,17 @@
 
 const fastify = require('fastify')({
   logger: {
-    level: 'debug',
+    level: 'info',
   },
 })
 
 fastify.register(require('./')).after((err) => {
-  fastify.log.error(err)
+  if (err) {
+    fastify.log.error(err)
+  }
   // Register custom clean up handler
-  fastify.gracefulShutdown((code, cb) => {
-    fastify.log.info('Graceful shutdown ...')
+  fastify.gracefulShutdown((signal, cb) => {
+    fastify.log.info('Received signal to shutdown: %s', signal)
     cb()
     fastify.log.info('Graceful shutdown complete')
   })

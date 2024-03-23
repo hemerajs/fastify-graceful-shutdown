@@ -7,7 +7,7 @@ Shutdown [Fastify](https://github.com/fastify/fastify) graceful asynchronously. 
 
 ## Features
 
-- Graceful and informative shutdown
+- Graceful and debug friendly shutdown
 - Flush the fastify logger before process exit to avoid losing logs
 - Handlers are called in parallel for faster shutdown
 
@@ -28,7 +28,7 @@ fastify.register(require('fastify-graceful-shutdown'))
 ```js
 fastify.after(() => {
   fastify.gracefulShutdown((signal, next) => {
-    console.log('Upps!')
+    fastify.log.info('Received signal to shutdown: %s', signal)
     next()
   })
 })
