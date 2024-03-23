@@ -2,7 +2,7 @@
 
 const fastify = require('fastify')({
   logger: {
-    level: 'info',
+    level: 'debug',
   },
 })
 
@@ -10,7 +10,9 @@ fastify.register(require('./')).after((err) => {
   fastify.log.error(err)
   // Register custom clean up handler
   fastify.gracefulShutdown((code, cb) => {
+    fastify.log.info('Graceful shutdown ...')
     cb()
+    fastify.log.info('Graceful shutdown complete')
   })
 })
 
@@ -29,7 +31,12 @@ const schema = {
   },
 }
 
-fastify.get('/', schema, function (req, reply) {
+fastify.get('/', schema, async function (req, reply) {
+  await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, 5000)
+  })
   reply.send({ hello: 'world' })
 })
 

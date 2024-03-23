@@ -33,19 +33,26 @@ describe('fastify-graceful-shutdown', () => {
     await fastify2.close()
   })
 
-  it('can pass handlerEventListener override', async function() {
+  it('can pass handlerEventListener override', async function () {
     this.timeout(10000)
     const fastify = Fastify()
 
     let removedListeners = []
     let addedListeners = []
     const mockEventListener = {
-      removeListener: (signal, listener) => { timeout: 1, removedListeners.push({signal, listener})},
-      once: (signal, listener) => { addedListeners.push({signal, listener})},
-      listenerCount: (signal) => addedListeners.length - removedListeners.length,
-      exit: (exitCode) => {}
+      removeListener: (signal, listener) => {
+        timeout: 1, removedListeners.push({ signal, listener })
+      },
+      once: (signal, listener) => {
+        addedListeners.push({ signal, listener })
+      },
+      listenerCount: (signal) =>
+        addedListeners.length - removedListeners.length,
+      exit: (exitCode) => {},
     }
-    fastify.register(fastifyGracefulShutdown, { handlerEventListener: mockEventListener })
+    fastify.register(fastifyGracefulShutdown, {
+      handlerEventListener: mockEventListener,
+    })
 
     fastify.after(() => {
       fastify.gracefulShutdown((signal, next) => {
