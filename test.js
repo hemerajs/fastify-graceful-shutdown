@@ -67,4 +67,21 @@ describe('fastify-graceful-shutdown', () => {
     expect(addedListeners.length).to.eq(2)
     expect(removedListeners.length).to.eq(0)
   })
+
+  it('work without logger enabled', async () => {
+    const fastify = Fastify({
+      logger: false,
+    })
+    fastify.register(fastifyGracefulShutdown, { resetHandlersOnInit: true })
+
+    fastify.after(() => {
+      fastify.gracefulShutdown((signal, next) => {
+        fastify.log.info('Starting graceful shutdown')
+        next()
+      })
+    })
+
+    await fastify.ready()
+    await fastify.close()
+  })
 })

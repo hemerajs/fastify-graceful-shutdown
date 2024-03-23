@@ -12,9 +12,9 @@ fastify.register(require('./')).after((err) => {
   }
   // Register custom clean up handler
   fastify.gracefulShutdown((signal, cb) => {
-    fastify.log.info('Received signal to shutdown: %s', signal)
+    fastify.log?.info('Received signal to shutdown: %s', signal)
     cb()
-    fastify.log.info('Graceful shutdown complete')
+    fastify.log?.info('Graceful shutdown complete')
   })
 })
 

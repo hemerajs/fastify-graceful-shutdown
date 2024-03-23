@@ -7,7 +7,9 @@ const parallel = require('fastparallel')()
 let registeredListeners = []
 
 function fastifyGracefulShutdown(fastify, opts, next) {
-  const logger = fastify.log.child({ plugin: 'fastify-graceful-shutdown' })
+  const logger = fastify.log
+    ? fastify.log.child({ plugin: 'fastify-graceful-shutdown' })
+    : undefined
   const handlers = []
   const timeout = opts.timeout || 10000
   const signals = ['SIGINT', 'SIGTERM']
@@ -35,21 +37,21 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
   function completed(err, signal) {
     if (err) {
-      logger.error({ err: err, signal: signal }, 'process terminated')
+      logger.error?.({ err: err, signal: signal }, 'process terminated')
       // Avoid losing data
-      logger.flush()
+      logger.flush?.()
       handlerEventListener.exit(1)
     } else {
-      logger.debug({ signal: signal }, 'process terminated')
+      logger.debug?.({ signal: signal }, 'process terminated')
       // Avoid losing data
-      logger.flush()
+      logger.flush?.()
       handlerEventListener.exit(0)
     }
   }
 
   function terminateAfterTimeout(signal, timeout) {
     setTimeout(() => {
-      logger.error(
+      logger.error?.(
         { signal: signal, timeout: timeout },
         'terminate process after timeout',
       )
@@ -72,7 +74,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
   // shutdown fastify
   addHandler((signal, cb) => {
-    logger.debug({ signal: signal }, 'triggering close hook')
+    logger.debug?.({ signal: signal }, 'triggering close hook')
     fastify.close(cb)
   })
 
@@ -80,7 +82,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   signals.forEach((signal) => {
     const listener = () => {
       terminateAfterTimeout(signal, timeout)
-      logger.debug({ signal: signal }, 'received signal')
+      logger.debug?.({ signal: signal }, 'received signal')
       shutdown(signal)
     }
     registeredListeners.push({ signal, listener })
