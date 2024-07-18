@@ -36,9 +36,9 @@ function fastifyGracefulShutdown(fastify, opts, next) {
 
   function completed(err, signal) {
     if (err) {
-      logger.error?.({ err: err, signal: signal }, 'process terminated')
+      logger.error?.({ err: err, signal: signal }, 'Process terminated')
     } else {
-      logger.debug?.({ signal: signal }, 'process terminated')
+      logger.debug?.({ signal: signal }, 'Process terminated')
     }
 
     logger.flush?.()
@@ -49,7 +49,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     setTimeout(() => {
       logger.error?.(
         { signal: signal, timeout: timeout },
-        'terminate process after timeout',
+        'Terminate process after timeout',
       )
       handlerEventListener.exit(1)
     }, timeout).unref()
@@ -61,7 +61,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
         return handler(signal)
       }),
     )
-    logger.debug?.({ signal: signal }, 'closing fastify server')
+    logger.debug?.({ signal: signal }, 'Closing fastify server')
     await fastify.close()
   }
 
@@ -77,7 +77,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   // register handlers
   signals.forEach((signal) => {
     const listener = () => {
-      logger.debug?.({ signal: signal }, 'received signal')
+      logger.debug?.({ signal: signal }, 'Received signal')
       terminateAfterTimeout(signal, timeout)
       shutdown(signal)
         .then(() => completed(null, signal))
