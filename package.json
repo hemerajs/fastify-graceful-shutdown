@@ -1,6 +1,6 @@
 {
   "name": "fastify-graceful-shutdown",
-  "version": "3.5.3",
+  "version": "4.0.0",
   "description": "Gracefully shutdown fastify",
   "main": "index.js",
   "scripts": {
