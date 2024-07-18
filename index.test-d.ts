@@ -11,4 +11,5 @@ app.register(plugin, {
 app.register(plugin, { timeout: 1 })
 app.register(plugin)
 
-app.gracefulShutdown((signal: string, next: () => void) => {})
+app.gracefulShutdown((signal: string) => {})
+app.gracefulShutdown(async (signal: string) => {})

@@ -33,25 +33,24 @@
     "url": "https://github.com/hemerajs/fastify-graceful-shutdown/issues"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "homepage": "https://github.com/hemerajs/fastify-graceful-shutdown#readme",
   "devDependencies": {
-    "@types/node": "^18",
+    "@types/node": "^20",
     "chai": "^4.4.1",
-    "fastify": "^4.26.2",
-    "mocha": "^10.2.0",
-    "np": "^10.0.1",
+    "fastify": "^4.28.1",
+    "mocha": "^10.6.0",
+    "np": "^10.0.7",
     "pre-commit": "^1.2.2",
-    "prettier": "^3.2.5",
-    "tsd": "^0.30.7"
+    "prettier": "^3.3.3",
+    "tsd": "^0.31.1"
   },
   "prettier": {
     "semi": false,
     "singleQuote": true
   },
   "dependencies": {
-    "fastify-plugin": "^4.5.1",
-    "fastparallel": "^2.4.1"
+    "fastify-plugin": "^4.5.1"
   }
 }

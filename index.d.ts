@@ -7,7 +7,7 @@ type FastifyGracefulShutdownPlugin =
 declare module 'fastify' {
   interface FastifyInstance {
     gracefulShutdown(
-      handler: (signal: string, next: (err?: Error) => void) => void,
+      handler: (signal: string) => Promise<void> | void,
     ): void
   }
 }

@@ -10,9 +10,8 @@ describe('fastify-graceful-shutdown', () => {
     fastify.register(fastifyGracefulShutdown, { resetHandlersOnInit: true })
 
     fastify.after(() => {
-      fastify.gracefulShutdown((signal, next) => {
+      fastify.gracefulShutdown(async (signal) => {
         fastify.log.info('Starting graceful shutdown')
-        next()
       })
     })
 
@@ -23,9 +22,8 @@ describe('fastify-graceful-shutdown', () => {
     fastify2.register(fastifyGracefulShutdown, { resetHandlersOnInit: true })
 
     fastify2.after(() => {
-      fastify2.gracefulShutdown((signal, next) => {
+      fastify2.gracefulShutdown(async (signal) => {
         fastify2.log.info('Starting graceful shutdown')
-        next()
       })
     })
 
@@ -55,9 +53,8 @@ describe('fastify-graceful-shutdown', () => {
     })
 
     fastify.after(() => {
-      fastify.gracefulShutdown((signal, next) => {
+      fastify.gracefulShutdown(async (signal) => {
         fastify.log.info('Starting graceful shutdown')
-        next()
       })
     })
 
@@ -75,9 +72,8 @@ describe('fastify-graceful-shutdown', () => {
     fastify.register(fastifyGracefulShutdown, { resetHandlersOnInit: true })
 
     fastify.after(() => {
-      fastify.gracefulShutdown((signal, next) => {
+      fastify.gracefulShutdown(async (signal) => {
         fastify.log.info('Starting graceful shutdown')
-        next()
       })
     })
 

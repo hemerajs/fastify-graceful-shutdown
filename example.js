@@ -2,19 +2,21 @@
 
 const fastify = require('fastify')({
   logger: {
-    level: 'info',
+    level: 'debug',
   },
 })
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 fastify.register(require('./')).after((err) => {
   if (err) {
     fastify.log.error(err)
   }
   // Register custom clean up handler
-  fastify.gracefulShutdown((signal, cb) => {
-    fastify.log?.info('Received signal to shutdown: %s', signal)
-    cb()
-    fastify.log?.info('Graceful shutdown complete')
+  fastify.gracefulShutdown(async (signal) => {
+    fastify.log?.info('received signal to shutdown: %s', signal)
+    await wait(3000)
+    fastify.log?.info('graceful shutdown complete')
   })
 })
 
@@ -34,11 +36,7 @@ const schema = {
 }
 
 fastify.get('/', schema, async function (req, reply) {
-  await new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve()
-    }, 5000)
-  })
+  await wait(3000)
   reply.send({ hello: 'world' })
 })
 
