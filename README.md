@@ -5,6 +5,10 @@
 
 Shutdown [Fastify](https://github.com/fastify/fastify) graceful asynchronously. By default the fastify `close` hook is called when `SIGINT` or `SIGTERM` was triggered.
 
+## Project status
+
+Development of new features has stopped. Using [close-with-grace](https://github.com/mcollina/close-with-grace) is recommended
+
 ## Features
 
 - Graceful and debug friendly shutdown
