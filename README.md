@@ -27,9 +27,9 @@ fastify.register(require('fastify-graceful-shutdown'))
 
 ```js
 fastify.after(() => {
-  fastify.gracefulShutdown((signal, next) => {
+  fastify.gracefulShutdown(async (signal) => {
     fastify.log.info('Received signal to shutdown: %s', signal)
-    next()
+    await doSomethingAsync()
   })
 })
 ```
