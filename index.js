@@ -25,12 +25,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   for (let i = 0; i < signals.length; i++) {
     let signal = signals[i]
     if (handlerEventListener.listenerCount(signal) > 0) {
-      next(
-        new Error(
-          `${signal} handler was already registered use fastify.gracefulShutdown`,
-        ),
-      )
-      return
+      logger.warn(`${signal} handler was already registered. Ensure a controlled shutdown`)
     }
   }
 
