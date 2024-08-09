@@ -6,9 +6,7 @@ type FastifyGracefulShutdownPlugin =
 
 declare module 'fastify' {
   interface FastifyInstance {
-    gracefulShutdown(
-      handler: (signal: string) => Promise<void> | void,
-    ): void
+    gracefulShutdown(handler: (signal: string) => Promise<void> | void): void
   }
 }
 
@@ -16,7 +14,11 @@ declare namespace fastifyGracefulShutdown {
   export type fastifyGracefulShutdownOptions = {
     timeout?: number
     resetHandlersOnInit?: boolean
-    handlerEventListener?: EventEmitter & { exit(code?: number): never }
+    useExit0?: boolean
+    handlerEventListener?: EventEmitter & {
+      exit(code?: number): never
+      kill(pid: number, signal?: string | number): boolean
+    }
   }
 
   export const fastifyGracefulShutdown: FastifyGracefulShutdownPlugin
