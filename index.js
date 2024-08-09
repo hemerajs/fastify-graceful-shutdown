@@ -13,12 +13,11 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   const timeout = opts.timeout || 10000
   const signals = ['SIGINT', 'SIGTERM']
   const handlerEventListener = opts.handlerEventListener || process
+  const useExit0 = opts.useExit0 || false
 
   // Remove preexisting listeners if already created by previous instance of same plugin
   if (opts.resetHandlersOnInit) {
-    registeredListeners.forEach(({ signal, listener }) => {
-      handlerEventListener.removeListener(signal, listener)
-    })
+    unregisterListeners()
     registeredListeners = []
   }
 
@@ -42,7 +41,13 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     }
 
     logger.flush?.()
-    handlerEventListener.exit(err ? 1 : 0)
+    if (useExit0) {
+      handlerEventListener.exit(err ? 1 : 0)
+    } else {
+      // Prevent us from catching our own signal
+      unregisterListeners()
+      handlerEventListener.kill(process.pid, signal)
+    }
   }
 
   function terminateAfterTimeout(signal, timeout) {
@@ -51,7 +56,13 @@ function fastifyGracefulShutdown(fastify, opts, next) {
         { signal: signal, timeout: timeout },
         'Terminate process after timeout',
       )
-      handlerEventListener.exit(1)
+      if (useExit0) {
+        handlerEventListener.exit(1)
+      } else {
+        // Prevent us from catching our own signal
+        unregisterListeners()
+        handlerEventListener.kill(process.pid, signal)
+      }
     }, timeout).unref()
   }
 
@@ -70,6 +81,12 @@ function fastifyGracefulShutdown(fastify, opts, next) {
       throw new Error('Expected a function but got a ' + typeof handler)
     }
     handlers.push(handler)
+  }
+
+  function unregisterListeners() {
+    registeredListeners.forEach(({ signal, listener }) => {
+      handlerEventListener.removeListener(signal, listener)
+    })
   }
 
   fastify.decorate('gracefulShutdown', addHandler)
