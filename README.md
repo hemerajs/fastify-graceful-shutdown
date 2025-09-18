@@ -36,7 +36,7 @@ fastify.after(() => {
 
 ## Compatibility
 
-Fastify >=3
+Fastify >=5
 
 ## Caveats
 
