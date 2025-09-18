@@ -39,12 +39,12 @@
   "devDependencies": {
     "@types/node": "^20",
     "chai": "^4.4.1",
-    "fastify": "^5.0.0",
-    "mocha": "^10.6.0",
-    "np": "^10.0.7",
-    "pre-commit": "^1.2.2",
-    "prettier": "^3.3.3",
-    "tsd": "^0.31.1"
+    "fastify": "^5.6.0",
+    "mocha": "^11.7.2",
+    "np": "^10.2.0",
+    "pre-commit": "^1.0.10",
+    "prettier": "^3.6.2",
+    "tsd": "^0.33.0"
   },
   "prettier": {
     "semi": false,
