@@ -23,6 +23,20 @@ npm install --save fastify-graceful-shutdown
 fastify.register(require('fastify-graceful-shutdown'))
 ```
 
+## Passing options
+
+- `timeout` (number) - The timeout in milliseconds to wait before forceful shutdown. Default is 10 seconds.
+- `useExit0` (boolean) - Exit with code 0 after successful shutdown, or 1 if reaching the timeout. Otherwise will exit with the received signal, eg `SIGTERM` or `SIGINT`. Default is `false`.
+- `resetHandlersOnInit` (boolean) - Remove preexisting listeners if already created by previous instance of same plugin. Default is `false`.
+
+```js
+fastify.register(require('fastify-graceful-shutdown'), {
+  timeout: 5000,
+  useExit0: true,
+  resetHandlersOnInit: true,
+})
+```
+
 ## Usage
 
 ```js
