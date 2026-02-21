@@ -13,3 +13,5 @@ app.register(plugin)
 
 app.gracefulShutdown((signal: string) => {})
 app.gracefulShutdown(async (signal: string) => {})
+app.afterGracefulShutdown((signal: string) => {})
+app.afterGracefulShutdown(async (signal: string) => {})

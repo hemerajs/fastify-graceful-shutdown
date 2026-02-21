@@ -10,6 +10,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     ? fastify.log.child({ plugin: 'fastify-graceful-shutdown' })
     : undefined
   const handlers = []
+  let currentSignal = null
   const timeout = opts.timeout || 10000
   const signals = ['SIGINT', 'SIGTERM']
   const handlerEventListener = opts.handlerEventListener || process
@@ -25,7 +26,9 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   for (let i = 0; i < signals.length; i++) {
     let signal = signals[i]
     if (handlerEventListener.listenerCount(signal) > 0) {
-      logger.warn(`${signal} handler was already registered. Ensure a controlled shutdown`)
+      logger.warn(
+        `${signal} handler was already registered. Ensure a controlled shutdown`,
+      )
     }
   }
 
@@ -51,6 +54,7 @@ function fastifyGracefulShutdown(fastify, opts, next) {
   }
 
   async function shutdown(signal) {
+    currentSignal = signal
     await Promise.all(
       handlers.map((handler) => {
         return handler(signal)
@@ -67,7 +71,17 @@ function fastifyGracefulShutdown(fastify, opts, next) {
     handlers.push(handler)
   }
 
+  function addOnCloseHandler(handler) {
+    if (typeof handler !== 'function') {
+      throw new Error('Expected a function but got a ' + typeof handler)
+    }
+    fastify.addHook('onClose', () => {
+      if (currentSignal) return handler(currentSignal)
+    })
+  }
+
   fastify.decorate('gracefulShutdown', addHandler)
+  fastify.decorate('afterGracefulShutdown', addOnCloseHandler)
 
   // register handlers
   signals.forEach((signal) => {

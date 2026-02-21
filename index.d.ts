@@ -9,6 +9,9 @@ declare module 'fastify' {
     gracefulShutdown(
       handler: (signal: string) => Promise<void> | void,
     ): void
+    afterGracefulShutdown(
+      handler: (signal: string) => Promise<void> | void,
+    ): void
   }
 }
 
